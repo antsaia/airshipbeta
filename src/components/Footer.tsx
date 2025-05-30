@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-start">
           <div>
             <div className="flex items-center">
-              <img src="/airshipbeta/airship-logo-icon.png" alt="Airship Logo" className="h-8 brightness-0 invert" />
+              <img src="/airship-logo-icon.png" alt="Airship Logo" className="h-8 brightness-0 invert" />
               <span className="ml-2 text-xl font-semibold">Airship Beta</span>
             </div>
             <p className="mt-4 text-gray-400">
