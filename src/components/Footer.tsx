@@ -1,4 +1,5 @@
 import React from 'react';
+import { Ship } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -7,7 +8,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-start">
           <div>
             <div className="flex items-center">
-              <img src={`${import.meta.env.BASE_URL}airship-logo-icon.png`} alt="Airship Logo" className="h-8 brightness-0 invert" />
+              <Ship className="h-8 w-8 text-white" />
               <span className="ml-2 text-xl font-semibold">Airship Beta</span>
             </div>
             <p className="mt-4 text-gray-400">

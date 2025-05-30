@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Ship } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,7 +9,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
-            <img src={`${import.meta.env.BASE_URL}airship-logo-icon.png`} alt="Airship Logo" className="h-8" />
+            <Ship className="h-8 w-8 text-[#0052FF]" />
             <span className="ml-2 text-xl font-semibold text-gray-900">Airship Beta</span>
           </div>
           
