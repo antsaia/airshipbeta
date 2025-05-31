@@ -1,6 +1,13 @@
-import { addRelease } from './db';
+import { getAllReleases, addRelease } from './db';
 
 export async function initializeSampleData() {
+  // First check if we already have releases
+  const existingReleases = await getAllReleases();
+  if (existingReleases.length > 0) {
+    console.log('Sample data already initialized');
+    return;
+  }
+
   const sampleReleases = [
     {
       title: 'Enhanced Performance Optimization',
@@ -139,12 +146,11 @@ To take advantage of these improvements, no additional configuration is required
     }
   ];
 
-  // Add sample releases sequentially
+  // Only proceed if no releases exist
   for (const release of sampleReleases) {
     try {
       await addRelease(release);
     } catch (error) {
-      // Log error but continue with other releases
       console.warn('Failed to add sample release:', error);
     }
   }
