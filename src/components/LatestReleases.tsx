@@ -32,7 +32,7 @@ const LatestReleases = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative">
         <div className="flex items-center mb-12">
           <Sparkles className="w-8 h-8 text-blue-400 mr-4" />
-          <h2 className="text-3xl font-bold text-white">Latest Innovations</h2>
+          <h2 className="text-3xl font-bold text-white">Latest Beta Releases</h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -42,13 +42,10 @@ const LatestReleases = () => {
               href={`${basePath}releases/${release.id}`}
               className="group bg-gray-800 backdrop-blur-lg bg-opacity-50 rounded-xl p-8 border border-gray-700 hover:border-blue-500 transition-all duration-300"
             >
-              <div className="flex justify-between items-start">
+              <div>
                 <h3 className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
                   {release.title}
                 </h3>
-                <span className="px-3 py-1 text-sm rounded-full bg-blue-900 text-blue-300">
-                  Beta
-                </span>
               </div>
               <p className="text-sm text-gray-400 mt-2">{release.date}</p>
               <p className="mt-4 text-gray-300 leading-relaxed">{release.description}</p>
