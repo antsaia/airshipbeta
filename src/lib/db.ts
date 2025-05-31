@@ -31,7 +31,7 @@ function generateSlug(title: string): string {
 }
 
 export const db = openDB(dbName, 3, {
-  upgrade(db, oldVersion, newVersion) {
+  upgrade(db, oldVersion, newVersion, transaction) {
     // If releases store doesn't exist, create it
     if (!db.objectStoreNames.contains(storeName)) {
       const store = db.createObjectStore(storeName, {
@@ -42,9 +42,8 @@ export const db = openDB(dbName, 3, {
       store.createIndex('title', 'title', { unique: true });
       store.createIndex('slug', 'slug', { unique: true });
     } else if (oldVersion < 3) {
-      // Add slug field to existing releases
-      const tx = db.transaction(storeName, 'readwrite');
-      const store = tx.objectStore(storeName);
+      // Add slug field to existing releases using the upgrade transaction
+      const store = transaction.objectStore(storeName);
       store.openCursor().then(function addSlug(cursor) {
         if (!cursor) return;
         const release = cursor.value;
