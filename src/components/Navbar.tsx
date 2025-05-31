@@ -12,7 +12,7 @@ const Navbar = () => {
             <img 
               src="/airshipbeta/airship-logo-icon.png" 
               alt="Airship Beta Logo" 
-              className="h-8 w-8"
+              className="h-8"
             />
             <span className="ml-2 text-xl font-semibold text-gray-900">Airship Beta</span>
           </div>
