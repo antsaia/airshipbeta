@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <img 
-              src="/airship-logo-icon copy.png" 
+              src="/airshipbeta/airship-logo-icon.png" 
               alt="Airship Beta Logo" 
               className="h-8 w-8"
             />
