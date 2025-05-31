@@ -95,3 +95,5 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
     </div>
   );
 }
+
+export default ReleaseDetails

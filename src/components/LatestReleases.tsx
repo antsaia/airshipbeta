@@ -65,3 +65,5 @@ const LatestReleases = () => {
     </div>
   );
 }
+
+export default LatestReleases
