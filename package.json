@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d docs --dotfiles"
+    "deploy": "cp -r docs/* ."
   },
   "dependencies": {
     "idb": "^8.0.0",
