@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase, Release } from '../lib/supabase';
+import { getAllReleases, Release } from '../lib/db';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 const LatestReleases = () => {
@@ -11,15 +11,11 @@ const LatestReleases = () => {
   }, []);
 
   async function fetchReleases() {
-    const { data, error } = await supabase
-      .from('releases')
-      .select('*')
-      .order('date', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching releases:', error);
-    } else {
+    try {
+      const data = await getAllReleases();
       setReleases(data || []);
+    } catch (error) {
+      console.error('Error fetching releases:', error);
     }
   }
 
@@ -63,4 +59,4 @@ const LatestReleases = () => {
   );
 }
 
-export default LatestReleases
+export default LatestReleases;

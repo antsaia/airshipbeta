@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase, Release } from '../lib/supabase';
+import { getReleaseById, Release } from '../lib/db';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 
@@ -18,16 +18,11 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
 
   async function fetchRelease() {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('releases')
-      .select('*')
-      .eq('id', releaseId)
-      .single();
-
-    if (error) {
+    try {
+      const data = await getReleaseById(releaseId);
+      setRelease(data || null);
+    } catch (error) {
       console.error('Error fetching release:', error);
-    } else {
-      setRelease(data);
     }
     setLoading(false);
   }
@@ -96,4 +91,4 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
   );
 }
 
-export default ReleaseDetails
+export default ReleaseDetails;
