@@ -3,18 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://antsaia.github.io/airshipbeta",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/antsaia/airshipbeta.git"
-  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "vite build",
-    "deploy": "git add dist -f && git commit -m \"Deploy to gh-pages\" && git subtree push --prefix dist origin gh-pages"
+    "preview": "vite preview"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
