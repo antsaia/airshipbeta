@@ -1,6 +1,8 @@
 import React from 'react';
 
 const Footer = () => {
+  const basePath = import.meta.env.BASE_URL;
+  
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -8,7 +10,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center">
               <img 
-                src="/airshipbeta/airship-logo-icon.png" 
+                src={`${basePath}airship-logo-icon.png`}
                 alt="Airship Beta Logo" 
                 className="h-8 brightness-0 invert"
               />
@@ -21,8 +23,8 @@ const Footer = () => {
           
           <div className="mt-8 md:mt-0">
             <ul className="flex space-x-6">
-              <li><a href="/legal" className="text-gray-400 hover:text-[#0052FF]">Legal</a></li>
-              <li><a href="/privacy" className="text-gray-400 hover:text-[#0052FF]">Privacy</a></li>
+              <li><a href={`${basePath}legal`} className="text-gray-400 hover:text-[#0052FF]">Legal</a></li>
+              <li><a href={`${basePath}privacy`} className="text-gray-400 hover:text-[#0052FF]">Privacy</a></li>
             </ul>
           </div>
         </div>

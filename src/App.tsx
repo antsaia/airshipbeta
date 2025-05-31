@@ -9,14 +9,18 @@ import Footer from './components/Footer';
 
 function App() {
   const path = window.location.pathname;
+  const basePath = import.meta.env.BASE_URL;
+  
+  // Remove the base path from the current path for comparison
+  const relativePath = path.replace(basePath, '/');
   
   return (
     <div className="min-h-screen bg-slate-50">
       <Navbar />
       <main>
-        {path === '/legal' ? (
+        {relativePath === '/legal' ? (
           <Legal />
-        ) : path === '/privacy' ? (
+        ) : relativePath === '/privacy' ? (
           <Privacy />
         ) : (
           <>
