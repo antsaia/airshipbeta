@@ -13,7 +13,7 @@ import Footer from './components/Footer';
 function App() {
   const path = window.location.pathname;
   const search = window.location.search;
-  const basePath = import.meta.env.BASE_URL;
+  const basePath = '/airshipbeta/';
   
   // Handle GitHub Pages redirect path
   let relativePath = path.replace(basePath, '');
