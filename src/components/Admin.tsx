@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllReleases, addRelease, updateRelease, deleteRelease, Release } from '../lib/db';
 import ReactMarkdown from 'react-markdown';
-import { Plus, Edit, Trash, Save, X } from 'lucide-react';
+import { Plus, Edit, Trash, Save, X, Image } from 'lucide-react';
 
 const Admin = () => {
   const [releases, setReleases] = useState<Release[]>([]);
@@ -31,7 +31,8 @@ const Admin = () => {
           date: release.date || new Date().toISOString().split('T')[0],
           description: release.description || '',
           status: 'Beta',
-          documentation: release.documentation || ''
+          documentation: release.documentation || '',
+          screenshots: release.screenshots || []
         });
       }
       fetchReleases();
@@ -51,6 +52,35 @@ const Admin = () => {
     }
   }
 
+  function handleAddScreenshot() {
+    const screenshots = editingRelease?.screenshots || [];
+    setEditingRelease({
+      ...editingRelease,
+      screenshots: [...screenshots, { url: '', caption: '' }]
+    });
+  }
+
+  function handleRemoveScreenshot(index: number) {
+    const screenshots = [...(editingRelease?.screenshots || [])];
+    screenshots.splice(index, 1);
+    setEditingRelease({
+      ...editingRelease,
+      screenshots
+    });
+  }
+
+  function handleScreenshotChange(index: number, field: 'url' | 'caption', value: string) {
+    const screenshots = [...(editingRelease?.screenshots || [])];
+    screenshots[index] = {
+      ...screenshots[index],
+      [field]: value
+    };
+    setEditingRelease({
+      ...editingRelease,
+      screenshots
+    });
+  }
+
   return (
     <div className="min-h-screen bg-gray-900 py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,6 +95,7 @@ const Admin = () => {
                 description: '',
                 status: 'Beta',
                 documentation: '',
+                screenshots: []
               });
             }}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors flex items-center"
@@ -75,7 +106,7 @@ const Admin = () => {
         </div>
 
         {(editingRelease || isCreating) && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto">
             <div className="bg-gray-800 rounded-xl p-8 max-w-2xl w-full">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-white">
@@ -131,6 +162,60 @@ const Admin = () => {
                     className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg"
                   />
                 </div>
+
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Screenshots
+                    </label>
+                    <button
+                      onClick={handleAddScreenshot}
+                      className="text-blue-400 hover:text-blue-300 flex items-center text-sm"
+                    >
+                      <Plus className="w-4 h-4 mr-1" />
+                      Add Screenshot
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    {editingRelease.screenshots?.map((screenshot, index) => (
+                      <div key={index} className="bg-gray-700 p-4 rounded-lg">
+                        <div className="flex justify-between items-start mb-2">
+                          <h4 className="text-white font-medium">Screenshot {index + 1}</h4>
+                          <button
+                            onClick={() => handleRemoveScreenshot(index)}
+                            className="text-red-400 hover:text-red-300"
+                          >
+                            <Trash className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            placeholder="Image URL"
+                            value={screenshot.url}
+                            onChange={(e) => handleScreenshotChange(index, 'url', e.target.value)}
+                            className="w-full bg-gray-600 text-white px-3 py-2 rounded"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Caption"
+                            value={screenshot.caption}
+                            onChange={(e) => handleScreenshotChange(index, 'caption', e.target.value)}
+                            className="w-full bg-gray-600 text-white px-3 py-2 rounded"
+                          />
+                          {screenshot.url && (
+                            <img
+                              src={screenshot.url}
+                              alt={screenshot.caption}
+                              className="w-full h-48 object-cover rounded mt-2"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">
                     Documentation (Markdown)
@@ -165,6 +250,7 @@ const Admin = () => {
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-300">Title</th>
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-300">Date</th>
                 <th className="px-6 py-3 text-left text-sm font-medium text-gray-300">Description</th>
+                <th className="px-6 py-3 text-center text-sm font-medium text-gray-300">Screenshots</th>
                 <th className="px-6 py-3 text-right text-sm font-medium text-gray-300">Actions</th>
               </tr>
             </thead>
@@ -174,6 +260,12 @@ const Admin = () => {
                   <td className="px-6 py-4 text-white">{release.title}</td>
                   <td className="px-6 py-4 text-gray-300">{release.date}</td>
                   <td className="px-6 py-4 text-gray-300">{release.description}</td>
+                  <td className="px-6 py-4 text-center text-gray-300">
+                    <span className="inline-flex items-center">
+                      <Image className="w-4 h-4 mr-1" />
+                      {release.screenshots?.length || 0}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => setEditingRelease(release)}
