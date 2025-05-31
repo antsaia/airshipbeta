@@ -1,16 +1,6 @@
-import { db } from './db';
 import { addRelease } from './db';
 
 export async function initializeSampleData() {
-  // Wait for database to be fully initialized
-  const database = await db;
-  
-  // Clear existing data
-  const tx = database.transaction(['releases', 'files'], 'readwrite');
-  await tx.objectStore('releases').clear();
-  await tx.objectStore('files').clear();
-  await tx.done;
-
   const sampleReleases = [
     {
       title: 'Enhanced Performance Optimization',
@@ -149,13 +139,13 @@ To take advantage of these improvements, no additional configuration is required
     }
   ];
 
-  // Add sample releases
+  // Add sample releases sequentially
   for (const release of sampleReleases) {
     try {
       await addRelease(release);
-      console.log(`Added release: ${release.title}`);
     } catch (error) {
-      console.error('Error adding release:', error);
+      // Log error but continue with other releases
+      console.warn('Failed to add sample release:', error);
     }
   }
 }
