@@ -11,10 +11,14 @@ import Footer from './components/Footer';
 
 function App() {
   const path = window.location.pathname;
+  const search = window.location.search;
   const basePath = import.meta.env.BASE_URL;
   
-  // Remove the base path from the current path for comparison
-  const relativePath = path.replace(basePath, '');
+  // Handle GitHub Pages redirect path
+  let relativePath = path.replace(basePath, '');
+  if (search.startsWith('?/')) {
+    relativePath = search.slice(2);
+  }
   
   // Extract release ID from path if present
   const releaseMatch = relativePath.match(/^releases\/(\d+)$/);
@@ -52,5 +56,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
