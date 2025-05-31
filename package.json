@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "vite build",
-    "deploy": "gh-pages -b gh-pages -d dist"
+    "deploy": "git add dist -f && git commit -m \"Deploy to gh-pages\" && git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",
