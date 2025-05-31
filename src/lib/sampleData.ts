@@ -1,11 +1,13 @@
+import { openDB } from 'idb';
 import { addRelease, getAllReleases } from './db';
 
 export async function initializeSampleData() {
-  // Check if data already exists
-  const existingReleases = await getAllReleases();
-  if (existingReleases.length > 0) {
-    return; // Skip initialization if data exists
-  }
+  // Clear existing data
+  const db = await openDB('airship-beta', 3);
+  const tx = db.transaction(['releases', 'files'], 'readwrite');
+  await tx.objectStore('releases').clear();
+  await tx.objectStore('files').clear();
+  await tx.done;
 
   const sampleReleases = [
     {
@@ -144,13 +146,6 @@ To take advantage of these improvements, no additional configuration is required
 - Test thoroughly before deployment`
     }
   ];
-
-  // Clear existing data
-  const db = await openDB('airship-beta', 3);
-  const tx = db.transaction(['releases', 'files'], 'readwrite');
-  await tx.objectStore('releases').clear();
-  await tx.objectStore('files').clear();
-  await tx.done;
 
   // Add sample releases
   for (const release of sampleReleases) {
