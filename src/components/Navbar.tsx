@@ -16,12 +16,6 @@ const Navbar = () => {
             />
             <span className="ml-2 text-xl font-semibold text-gray-900">Airship Beta</span>
           </div>
-          
-          <div className="hidden md:flex items-center">
-            <a href="#" className="bg-[#0052FF] text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors">
-              Request Access
-            </a>
-          </div>
 
           <div className="md:hidden flex items-center">
             <button
@@ -37,9 +31,6 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="#" className="block px-3 py-2 bg-[#0052FF] text-white rounded-lg text-center mt-4">
-              Request Access
-            </a>
           </div>
         </div>
       )}

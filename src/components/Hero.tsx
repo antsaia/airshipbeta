@@ -15,18 +15,12 @@ const Hero = () => {
             Stay ahead of the curve with Airship Beta. Get early access to our latest features 
             and help shape the future of cross-channel customer experiences.
           </p>
-          <div className="mt-10 flex justify-center gap-4">
+          <div className="mt-10 flex justify-center">
             <a
               href="#latest-releases"
               className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition-all shadow-lg"
             >
               View Latest Releases
-            </a>
-            <a
-              href="#"
-              className="bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 transition-all shadow-lg"
-            >
-              Request Access
             </a>
           </div>
         </div>
