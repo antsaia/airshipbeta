@@ -145,6 +145,14 @@ To take advantage of these improvements, no additional configuration is required
     }
   ];
 
+  // Clear existing data
+  const db = await openDB('airship-beta', 3);
+  const tx = db.transaction(['releases', 'files'], 'readwrite');
+  await tx.objectStore('releases').clear();
+  await tx.objectStore('files').clear();
+  await tx.done;
+
+  // Add sample releases
   for (const release of sampleReleases) {
     try {
       await addRelease(release);
