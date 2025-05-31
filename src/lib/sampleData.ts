@@ -1,10 +1,12 @@
-import { openDB } from 'idb';
-import { addRelease, getAllReleases } from './db';
+import { db } from './db';
+import { addRelease } from './db';
 
 export async function initializeSampleData() {
+  // Wait for database to be fully initialized
+  const database = await db;
+  
   // Clear existing data
-  const db = await openDB('airship-beta', 3);
-  const tx = db.transaction(['releases', 'files'], 'readwrite');
+  const tx = database.transaction(['releases', 'files'], 'readwrite');
   await tx.objectStore('releases').clear();
   await tx.objectStore('files').clear();
   await tx.done;
