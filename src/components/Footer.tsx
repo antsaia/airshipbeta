@@ -21,8 +21,8 @@ const Footer = () => {
           
           <div className="mt-8 md:mt-0">
             <ul className="flex space-x-6">
-              <li><a href="#" className="text-gray-400 hover:text-[#0052FF]">Legal</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-[#0052FF]">Privacy</a></li>
+              <li><a href="/legal" className="text-gray-400 hover:text-[#0052FF]">Legal</a></li>
+              <li><a href="/privacy" className="text-gray-400 hover:text-[#0052FF]">Privacy</a></li>
             </ul>
           </div>
         </div>
