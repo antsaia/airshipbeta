@@ -78,12 +78,8 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
             </div>
             <div className="flex items-center">
               <Tag className="w-4 h-4 mr-2 text-gray-400" />
-              <span className={`px-3 py-1 text-sm rounded-full ${
-                release.status === 'Beta' 
-                  ? 'bg-blue-900 text-blue-300' 
-                  : 'bg-purple-900 text-purple-300'
-              }`}>
-                {release.status}
+              <span className="px-3 py-1 text-sm rounded-full bg-blue-900 text-blue-300">
+                Beta
               </span>
             </div>
           </div>
@@ -99,5 +95,3 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
     </div>
   );
 }
-
-export default ReleaseDetails;

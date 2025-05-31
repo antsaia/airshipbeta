@@ -10,7 +10,7 @@ export interface Release {
   title: string;
   date: string;
   description: string;
-  status: 'Alpha' | 'Beta';
+  status: 'Beta';
   documentation: string;
   created_at: string;
 }

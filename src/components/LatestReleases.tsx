@@ -46,12 +46,8 @@ const LatestReleases = () => {
                 <h3 className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
                   {release.title}
                 </h3>
-                <span className={`px-3 py-1 text-sm rounded-full ${
-                  release.status === 'Beta' 
-                    ? 'bg-blue-900 text-blue-300' 
-                    : 'bg-purple-900 text-purple-300'
-                }`}>
-                  {release.status}
+                <span className="px-3 py-1 text-sm rounded-full bg-blue-900 text-blue-300">
+                  Beta
                 </span>
               </div>
               <p className="text-sm text-gray-400 mt-2">{release.date}</p>
@@ -69,5 +65,3 @@ const LatestReleases = () => {
     </div>
   );
 }
-
-export default LatestReleases;
