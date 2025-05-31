@@ -3,10 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://yourusername.github.io/airshipbeta",
+  "homepage": "https://antsaia.github.io/airshipbeta",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/airshipbeta.git"
+    "url": "git+https://github.com/antsaia/airshipbeta.git"
   },
   "scripts": {
     "dev": "vite",
