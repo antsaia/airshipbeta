@@ -3,24 +3,30 @@ import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const basePath = import.meta.env.BASE_URL;
 
   return (
-    <nav className="bg-white">
+    <nav className="absolute top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20">
-          <div className="flex items-center">
+        <div className="flex justify-between h-24">
+          <a 
+            href={basePath}
+            className="flex items-center group"
+          >
             <img 
-              src="/airshipbeta/airship-logo-icon.png" 
+              src={`${basePath}airship-logo-icon.png`}
               alt="Airship Beta Logo" 
-              className="h-8"
+              className="h-8 brightness-0 invert"
             />
-            <span className="ml-2 text-xl font-semibold text-gray-900">Airship Beta</span>
-          </div>
+            <span className="ml-2 text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
+              Airship Beta
+            </span>
+          </a>
 
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-white hover:text-blue-400 transition-colors"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
