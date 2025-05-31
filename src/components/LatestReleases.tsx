@@ -1,57 +1,89 @@
-import React from 'react';
-
-const releases = [
-  {
-    title: 'Enhanced Push Notifications',
-    date: 'March 2024',
-    description: 'Improved delivery rates and new targeting options for mobile push notifications.',
-    status: 'Beta',
-    link: '#'
-  },
-  {
-    title: 'Analytics Dashboard 2.0',
-    date: 'February 2024',
-    description: 'Completely redesigned analytics dashboard with real-time metrics and custom reports.',
-    status: 'Alpha',
-    link: '#'
-  },
-  {
-    title: 'Message Templates API',
-    date: 'January 2024',
-    description: 'New API endpoints for managing and deploying message templates programmatically.',
-    status: 'Beta',
-    link: '#'
-  }
-];
+import React, { useEffect, useState } from 'react';
+import { supabase, Release } from '../lib/supabase';
+import ReactMarkdown from 'react-markdown';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 const LatestReleases = () => {
+  const [releases, setReleases] = useState<Release[]>([]);
+  const [selectedRelease, setSelectedRelease] = useState<Release | null>(null);
+
+  useEffect(() => {
+    fetchReleases();
+  }, []);
+
+  async function fetchReleases() {
+    const { data, error } = await supabase
+      .from('releases')
+      .select('*')
+      .order('date', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching releases:', error);
+    } else {
+      setReleases(data || []);
+    }
+  }
+
   return (
-    <div id="latest-releases" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-gray-50">
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">Latest Releases</h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {releases.map((release, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow border border-gray-100">
-            <div className="flex justify-between items-start">
-              <h3 className="text-xl font-semibold text-gray-900">{release.title}</h3>
-              <span className={`px-3 py-1 text-sm rounded-full ${
-                release.status === 'Beta' ? 'bg-blue-100 text-[#0052FF]' : 'bg-purple-100 text-purple-800'
-              }`}>
-                {release.status}
-              </span>
-            </div>
-            <p className="text-sm text-gray-500 mt-2">{release.date}</p>
-            <p className="mt-4 text-gray-600 leading-relaxed">{release.description}</p>
-            <a
-              href={release.link}
-              className="mt-6 inline-flex items-center text-[#0052FF] hover:text-blue-700 font-medium"
+    <div id="latest-releases" className="relative bg-gray-900 overflow-hidden">
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-700 opacity-10" />
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI1MDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IHgxPSI1MCUiIHkxPSIwJSIgeDI9IjUwJSIgeTI9IjEwMCUiIGlkPSJhIj48c3RvcCBzdG9wLWNvbG9yPSIjZmZmIiBvZmZzZXQ9IjAlIi8+PHN0b3Agc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwIiBvZmZzZXQ9IjEwMCUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cGF0aCBkPSJNMTQ0MCAyMDBzLTI4OC41IDk1LTcyMCA5NVMwIDIwMCAwIDIwMHY0NTFoMTQ0MFYyMDB6IiBmaWxsPSJ1cmwoI2EpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIG9wYWNpdHk9Ii4wNSIvPjwvc3ZnPg==')] opacity-5" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative">
+        <div className="flex items-center mb-12">
+          <Sparkles className="w-8 h-8 text-blue-400 mr-4" />
+          <h2 className="text-3xl font-bold text-white">Latest Innovations</h2>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {releases.map((release) => (
+            <div
+              key={release.id}
+              className="group bg-gray-800 backdrop-blur-lg bg-opacity-50 rounded-xl p-8 border border-gray-700 hover:border-blue-500 transition-all duration-300 cursor-pointer"
+              onClick={() => setSelectedRelease(release)}
             >
-              Learn more
-              <svg className="w-4 h-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </a>
+              <div className="flex justify-between items-start">
+                <h3 className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
+                  {release.title}
+                </h3>
+                <span className={`px-3 py-1 text-sm rounded-full ${
+                  release.status === 'Beta' 
+                    ? 'bg-blue-900 text-blue-300' 
+                    : 'bg-purple-900 text-purple-300'
+                }`}>
+                  {release.status}
+                </span>
+              </div>
+              <p className="text-sm text-gray-400 mt-2">{release.date}</p>
+              <p className="mt-4 text-gray-300 leading-relaxed">{release.description}</p>
+              <button
+                className="mt-6 inline-flex items-center text-blue-400 hover:text-blue-300 font-medium group-hover:translate-x-2 transition-transform"
+              >
+                Learn more
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Documentation Modal */}
+        {selectedRelease && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-gray-800 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+              <h3 className="text-2xl font-bold text-white mb-4">{selectedRelease.title}</h3>
+              <div className="prose prose-invert">
+                <ReactMarkdown>{selectedRelease.documentation}</ReactMarkdown>
+              </div>
+              <button
+                onClick={() => setSelectedRelease(null)}
+                className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
