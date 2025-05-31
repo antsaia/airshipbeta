@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Footer = () => {
-  const basePath = import.meta.env.BASE_URL;
+  const basePath = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL;
   
   return (
     <footer className="bg-gray-900 text-white">

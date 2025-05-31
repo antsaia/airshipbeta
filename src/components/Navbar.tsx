@@ -3,7 +3,7 @@ import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const basePath = import.meta.env.BASE_URL;
+  const basePath = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL;
 
   return (
     <nav className="absolute top-0 left-0 right-0 z-50">
