@@ -20,24 +20,33 @@ function App() {
   const releaseMatch = relativePath.match(/^\/releases\/(\d+)$/);
   const releaseId = releaseMatch ? parseInt(releaseMatch[1]) : null;
 
-  return (
-    <div className="min-h-screen bg-slate-50">
-      {relativePath !== '/admin' && <Navbar />}
-      <main>
-        {relativePath === '/legal' ? (
-          <Legal />
-        ) : relativePath === '/privacy' ? (
-          <Privacy />
-        ) : relativePath === '/admin' ? (
-          <Admin />
-        ) : releaseId ? (
-          <ReleaseDetails releaseId={releaseId} />
-        ) : (
+  // Determine which component to render based on the relative path
+  const renderContent = () => {
+    switch (relativePath) {
+      case '/legal':
+        return <Legal />;
+      case '/privacy':
+        return <Privacy />;
+      case '/admin':
+        return <Admin />;
+      default:
+        if (releaseId) {
+          return <ReleaseDetails releaseId={releaseId} />;
+        }
+        return (
           <>
             <Hero />
             <LatestReleases />
           </>
-        )}
+        );
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {relativePath !== '/admin' && <Navbar />}
+      <main>
+        {renderContent()}
       </main>
       {relativePath !== '/admin' && <Footer />}
     </div>
