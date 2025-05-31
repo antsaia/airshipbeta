@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAllReleases, addRelease, updateRelease, deleteRelease, Release } from '../lib/db';
 import ReactMarkdown from 'react-markdown';
-import { Plus, Edit, Trash, Save, X, Image } from 'lucide-react';
+import { Plus, Edit, Trash, Save, X, Image, Upload } from 'lucide-react';
 
 const Admin = () => {
   const [releases, setReleases] = useState<Release[]>([]);
@@ -69,12 +69,20 @@ const Admin = () => {
     });
   }
 
-  function handleScreenshotChange(index: number, field: 'url' | 'caption', value: string) {
+  function handleScreenshotChange(index: number, field: 'url' | 'caption' | 'file', value: string | File) {
     const screenshots = [...(editingRelease?.screenshots || [])];
-    screenshots[index] = {
-      ...screenshots[index],
-      [field]: value
-    };
+    if (field === 'file' && value instanceof File) {
+      screenshots[index] = {
+        ...screenshots[index],
+        file: value,
+        url: URL.createObjectURL(value)
+      };
+    } else if (typeof value === 'string') {
+      screenshots[index] = {
+        ...screenshots[index],
+        [field]: value
+      };
+    }
     setEditingRelease({
       ...editingRelease,
       screenshots
@@ -189,13 +197,30 @@ const Admin = () => {
                           </button>
                         </div>
                         <div className="space-y-2">
-                          <input
-                            type="text"
-                            placeholder="Image URL"
-                            value={screenshot.url}
-                            onChange={(e) => handleScreenshotChange(index, 'url', e.target.value)}
-                            className="w-full bg-gray-600 text-white px-3 py-2 rounded"
-                          />
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="text"
+                              placeholder="Image URL"
+                              value={screenshot.url}
+                              onChange={(e) => handleScreenshotChange(index, 'url', e.target.value)}
+                              className="flex-1 bg-gray-600 text-white px-3 py-2 rounded"
+                            />
+                            <label className="bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-500 cursor-pointer flex items-center">
+                              <Upload className="w-4 h-4 mr-1" />
+                              Upload
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    handleScreenshotChange(index, 'file', file);
+                                  }
+                                }}
+                              />
+                            </label>
+                          </div>
                           <input
                             type="text"
                             placeholder="Caption"
