@@ -1,6 +1,12 @@
-import { addRelease } from './db';
+import { addRelease, getAllReleases } from './db';
 
 export async function initializeSampleData() {
+  // Check if data already exists
+  const existingReleases = await getAllReleases();
+  if (existingReleases.length > 0) {
+    return; // Skip initialization if data exists
+  }
+
   const sampleReleases = [
     {
       title: 'Enhanced Performance Optimization',
