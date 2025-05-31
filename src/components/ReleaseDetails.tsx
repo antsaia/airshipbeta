@@ -10,6 +10,7 @@ interface ReleaseDetailsProps {
 const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
   const [release, setRelease] = useState<Release | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeScreenshot, setActiveScreenshot] = useState(0);
   const basePath = import.meta.env.BASE_URL;
 
   useEffect(() => {
@@ -84,6 +85,40 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
                 <Calendar className="w-4 h-4 mr-2" />
                 {release.date}
               </div>
+
+              {release.screenshots && release.screenshots.length > 0 && (
+                <div className="mb-12">
+                  <div className="relative rounded-lg overflow-hidden">
+                    <img
+                      src={release.screenshots[activeScreenshot].url}
+                      alt={release.screenshots[activeScreenshot].caption}
+                      className="w-full h-auto"
+                    />
+                    <p className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4 text-sm">
+                      {release.screenshots[activeScreenshot].caption}
+                    </p>
+                  </div>
+                  {release.screenshots.length > 1 && (
+                    <div className="flex gap-4 mt-4">
+                      {release.screenshots.map((screenshot, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setActiveScreenshot(index)}
+                          className={`relative rounded-lg overflow-hidden w-24 h-24 transition-opacity ${
+                            index === activeScreenshot ? 'ring-2 ring-blue-400' : 'opacity-50 hover:opacity-75'
+                          }`}
+                        >
+                          <img
+                            src={screenshot.url}
+                            alt={screenshot.caption}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="prose prose-invert prose-lg max-w-none">
                 <div className="text-gray-300 text-lg leading-relaxed mb-12 border-b border-gray-700 pb-8">

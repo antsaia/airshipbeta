@@ -1,5 +1,10 @@
 import { openDB } from 'idb';
 
+export interface Screenshot {
+  url: string;
+  caption: string;
+}
+
 export interface Release {
   id?: number;
   title: string;
@@ -7,6 +12,7 @@ export interface Release {
   description: string;
   status: 'Beta';
   documentation: string;
+  screenshots?: Screenshot[];
   created_at?: string;
 }
 

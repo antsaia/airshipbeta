@@ -13,6 +13,16 @@ export async function initializeSampleData() {
       date: '2025-03-15',
       description: 'Major improvements to system performance and resource utilization.',
       status: 'Beta' as const,
+      screenshots: [
+        {
+          url: 'https://images.pexels.com/photos/5473337/pexels-photo-5473337.jpeg',
+          caption: 'Performance Dashboard showing improved metrics'
+        },
+        {
+          url: 'https://images.pexels.com/photos/5473302/pexels-photo-5473302.jpeg',
+          caption: 'System resource utilization graphs'
+        }
+      ],
       documentation: `# Performance Optimization Update
 
 ## Key Improvements
@@ -44,6 +54,16 @@ To take advantage of these improvements, no additional configuration is required
       date: '2025-03-01',
       description: 'Introducing a powerful new analytics dashboard with real-time insights.',
       status: 'Beta' as const,
+      screenshots: [
+        {
+          url: 'https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg',
+          caption: 'Analytics Dashboard Overview'
+        },
+        {
+          url: 'https://images.pexels.com/photos/7681094/pexels-photo-7681094.jpeg',
+          caption: 'Custom Report Builder Interface'
+        }
+      ],
       documentation: `# Analytics Dashboard
 
 ## Features
@@ -80,6 +100,16 @@ To take advantage of these improvements, no additional configuration is required
       date: '2025-02-15',
       description: 'Seamlessly coordinate messages across email, SMS, and push notifications.',
       status: 'Beta' as const,
+      screenshots: [
+        {
+          url: 'https://images.pexels.com/photos/8439094/pexels-photo-8439094.jpeg',
+          caption: 'Multi-Channel Message Composer'
+        },
+        {
+          url: 'https://images.pexels.com/photos/8439097/pexels-photo-8439097.jpeg',
+          caption: 'Channel Coordination Timeline'
+        }
+      ],
       documentation: `# Multi-Channel Messaging
 
 ## New Capabilities

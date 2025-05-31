@@ -37,7 +37,16 @@ const LatestReleases = () => {
               href={`${basePath}releases/${release.id}`}
               className="group relative bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:transform hover:-translate-y-1"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0052FF] to-[#00D4FF] opacity-0 group-hover:opacity-10 transition-opacity" />
+              {release.screenshots && release.screenshots[0] && (
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={release.screenshots[0].url}
+                    alt={release.screenshots[0].caption}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60" />
+                </div>
+              )}
               <div className="relative p-8">
                 <div className="flex items-center text-gray-400 text-sm mb-4">
                   <Calendar className="w-4 h-4 mr-2" />
