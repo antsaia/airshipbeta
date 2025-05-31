@@ -32,39 +32,27 @@ function generateSlug(title: string): string {
 
 export const db = openDB(dbName, 3, {
   upgrade(db, oldVersion, newVersion, transaction) {
-    // Version 1: Create initial stores
-    if (oldVersion < 1) {
-      const store = db.createObjectStore(storeName, {
-        keyPath: 'id',
-        autoIncrement: true,
-      });
-      store.createIndex('date', 'date');
-      store.createIndex('title', 'title', { unique: true });
-      
-      db.createObjectStore(fileStoreName);
-    }
-
-    // Version 2: Add slug index to releases store
-    if (oldVersion < 2) {
-      const store = transaction.objectStore(storeName);
-      if (!store.indexNames.contains('slug')) {
-        store.createIndex('slug', 'slug', { unique: true });
+    // Delete existing stores if they exist
+    if (oldVersion > 0) {
+      if (db.objectStoreNames.contains(storeName)) {
+        db.deleteObjectStore(storeName);
+      }
+      if (db.objectStoreNames.contains(fileStoreName)) {
+        db.deleteObjectStore(fileStoreName);
       }
     }
 
-    // Version 3: Ensure all existing records have slugs
-    if (oldVersion < 3) {
-      const store = transaction.objectStore(storeName);
-      store.openCursor().then(function addSlug(cursor) {
-        if (!cursor) return;
-        const release = cursor.value;
-        if (!release.slug) {
-          release.slug = generateSlug(release.title);
-          cursor.update(release);
-        }
-        return cursor.continue().then(addSlug);
-      });
-    }
+    // Create releases store with new schema
+    const store = db.createObjectStore(storeName, {
+      keyPath: 'id',
+      autoIncrement: true,
+    });
+    store.createIndex('date', 'date');
+    store.createIndex('title', 'title', { unique: true });
+    store.createIndex('slug', 'slug', { unique: true });
+
+    // Create files store for binary data
+    db.createObjectStore(fileStoreName);
   },
 });
 
