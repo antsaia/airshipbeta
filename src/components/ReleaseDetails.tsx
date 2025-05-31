@@ -11,7 +11,7 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
   const [release, setRelease] = useState<Release | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeScreenshot, setActiveScreenshot] = useState(0);
-  const basePath = import.meta.env.BASE_URL;
+  const basePath = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL;
 
   useEffect(() => {
     fetchRelease();

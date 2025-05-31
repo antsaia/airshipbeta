@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles, Calendar } from 'lucide-react';
 
 const LatestReleases = () => {
   const [releases, setReleases] = useState<Release[]>([]);
-  const basePath = import.meta.env.BASE_URL;
+  const basePath = import.meta.env.DEV ? '/' : import.meta.env.BASE_URL;
 
   useEffect(() => {
     fetchReleases();
