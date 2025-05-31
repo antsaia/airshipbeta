@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://stackblitz.github.io/airshipbeta",
+  "homepage": "https://antsaia.github.io/airshipbeta",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
