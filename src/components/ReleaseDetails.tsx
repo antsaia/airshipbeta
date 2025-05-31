@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getReleaseById, Release } from '../lib/db';
+import { getReleaseBySlug, Release } from '../lib/db';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, Calendar, Tag, Sparkles } from 'lucide-react';
 
 interface ReleaseDetailsProps {
-  releaseId: number;
+  releaseSlug: string;
 }
 
-const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
+const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseSlug }) => {
   const [release, setRelease] = useState<Release | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeScreenshot, setActiveScreenshot] = useState(0);
@@ -15,12 +15,12 @@ const ReleaseDetails: React.FC<ReleaseDetailsProps> = ({ releaseId }) => {
 
   useEffect(() => {
     fetchRelease();
-  }, [releaseId]);
+  }, [releaseSlug]);
 
   async function fetchRelease() {
     setLoading(true);
     try {
-      const data = await getReleaseById(releaseId);
+      const data = await getReleaseBySlug(releaseSlug);
       setRelease(data || null);
     } catch (error) {
       console.error('Error fetching release:', error);

@@ -21,9 +21,9 @@ function App() {
     relativePath = search.slice(2);
   }
   
-  // Extract release ID from path if present
-  const releaseMatch = relativePath.match(/^releases\/(\d+)$/);
-  const releaseId = releaseMatch ? parseInt(releaseMatch[1]) : null;
+  // Extract release slug from path if present
+  const releaseMatch = relativePath.match(/^releases\/([a-z0-9-]+)$/);
+  const releaseSlug = releaseMatch ? releaseMatch[1] : null;
 
   // Extract edit ID from path if present
   const editMatch = relativePath.match(/^admin\/edit\/(\d+)$/);
@@ -44,8 +44,8 @@ function App() {
         if (editId) {
           return <EditRelease releaseId={editId} />;
         }
-        if (releaseId) {
-          return <ReleaseDetails releaseId={releaseId} />;
+        if (releaseSlug) {
+          return <ReleaseDetails releaseSlug={releaseSlug} />;
         }
         return (
           <>
@@ -67,4 +67,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

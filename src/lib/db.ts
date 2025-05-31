@@ -10,6 +10,7 @@ export interface Screenshot {
 export interface Release {
   id?: number;
   title: string;
+  slug: string;
   date: string;
   description: string;
   status: 'Beta';
@@ -22,7 +23,14 @@ const dbName = 'airship-beta';
 const storeName = 'releases';
 const fileStoreName = 'files';
 
-export const db = openDB(dbName, 2, {
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+export const db = openDB(dbName, 3, {
   upgrade(db, oldVersion, newVersion) {
     // If releases store doesn't exist, create it
     if (!db.objectStoreNames.contains(storeName)) {
@@ -32,6 +40,21 @@ export const db = openDB(dbName, 2, {
       });
       store.createIndex('date', 'date');
       store.createIndex('title', 'title', { unique: true });
+      store.createIndex('slug', 'slug', { unique: true });
+    } else if (oldVersion < 3) {
+      // Add slug field to existing releases
+      const tx = db.transaction(storeName, 'readwrite');
+      const store = tx.objectStore(storeName);
+      store.openCursor().then(function addSlug(cursor) {
+        if (!cursor) return;
+        const release = cursor.value;
+        if (!release.slug) {
+          release.slug = generateSlug(release.title);
+          cursor.update(release);
+        }
+        return cursor.continue().then(addSlug);
+      });
+      store.createIndex('slug', 'slug', { unique: true });
     }
 
     // If files store doesn't exist, create it
@@ -42,7 +65,7 @@ export const db = openDB(dbName, 2, {
 });
 
 export async function getAllReleases(): Promise<Release[]> {
-  const db = await openDB(dbName, 2);
+  const db = await openDB(dbName, 3);
   const tx = db.transaction([storeName, fileStoreName], 'readonly');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
@@ -69,8 +92,32 @@ export async function getAllReleases(): Promise<Release[]> {
   return releases.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+export async function getReleaseBySlug(slug: string): Promise<Release | undefined> {
+  const db = await openDB(dbName, 3);
+  const tx = db.transaction([storeName, fileStoreName], 'readonly');
+  const store = tx.objectStore(storeName);
+  const slugIndex = store.index('slug');
+  const fileStore = tx.objectStore(fileStoreName);
+  const release = await slugIndex.get(slug);
+
+  if (release?.screenshots) {
+    for (const screenshot of release.screenshots) {
+      if (screenshot.url.startsWith('blob:')) {
+        const fileKey = screenshot.url.split('/').pop();
+        if (fileKey) {
+          screenshot.blob = await fileStore.get(fileKey);
+          screenshot.url = URL.createObjectURL(screenshot.blob);
+        }
+      }
+    }
+  }
+
+  await tx.done;
+  return release;
+}
+
 export async function getReleaseById(id: number): Promise<Release | undefined> {
-  const db = await openDB(dbName, 2);
+  const db = await openDB(dbName, 3);
   const tx = db.transaction([storeName, fileStoreName], 'readonly');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
@@ -92,8 +139,8 @@ export async function getReleaseById(id: number): Promise<Release | undefined> {
   return release;
 }
 
-export async function addRelease(release: Omit<Release, 'id' | 'created_at'>): Promise<number> {
-  const db = await openDB(dbName, 2);
+export async function addRelease(release: Omit<Release, 'id' | 'created_at' | 'slug'>): Promise<number> {
+  const db = await openDB(dbName, 3);
   const tx = db.transaction([storeName, fileStoreName], 'readwrite');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
@@ -104,6 +151,17 @@ export async function addRelease(release: Omit<Release, 'id' | 'created_at'>): P
   
   if (existingRelease) {
     throw new Error('A release with this title already exists');
+  }
+
+  // Generate slug from title
+  const slug = generateSlug(release.title);
+
+  // Check if slug already exists
+  const slugIndex = store.index('slug');
+  const existingSlug = await slugIndex.get(slug);
+
+  if (existingSlug) {
+    throw new Error('A release with this slug already exists');
   }
 
   // Store files and update URLs
@@ -120,6 +178,7 @@ export async function addRelease(release: Omit<Release, 'id' | 'created_at'>): P
   
   const newRelease = {
     ...release,
+    slug,
     created_at: new Date().toISOString(),
   };
   
@@ -129,10 +188,24 @@ export async function addRelease(release: Omit<Release, 'id' | 'created_at'>): P
 }
 
 export async function updateRelease(release: Release): Promise<number> {
-  const db = await openDB(dbName, 2);
+  const db = await openDB(dbName, 3);
   const tx = db.transaction([storeName, fileStoreName], 'readwrite');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
+
+  // Generate new slug if title changed
+  const oldRelease = await store.get(release.id!);
+  if (oldRelease && oldRelease.title !== release.title) {
+    release.slug = generateSlug(release.title);
+    
+    // Check if new slug already exists
+    const slugIndex = store.index('slug');
+    const existingSlug = await slugIndex.get(release.slug);
+
+    if (existingSlug && existingSlug.id !== release.id) {
+      throw new Error('A release with this slug already exists');
+    }
+  }
 
   // Store new files and update URLs
   if (release.screenshots) {
@@ -156,7 +229,7 @@ export async function updateRelease(release: Release): Promise<number> {
 }
 
 export async function deleteRelease(id: number): Promise<void> {
-  const db = await openDB(dbName, 2);
+  const db = await openDB(dbName, 3);
   const tx = db.transaction([storeName, fileStoreName], 'readwrite');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);

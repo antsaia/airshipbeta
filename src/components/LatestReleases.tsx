@@ -34,7 +34,7 @@ const LatestReleases = () => {
           {releases.map((release) => (
             <a
               key={release.id}
-              href={`${basePath}releases/${release.id}`}
+              href={`${basePath}releases/${release.slug}`}
               className="group relative bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:transform hover:-translate-y-1"
             >
               {release.screenshots && release.screenshots[0] && (
