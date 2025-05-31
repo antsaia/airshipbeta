@@ -22,23 +22,27 @@ const dbName = 'airship-beta';
 const storeName = 'releases';
 const fileStoreName = 'files';
 
-export const db = openDB(dbName, 1, {
-  upgrade(db) {
-    // Create releases store
-    const store = db.createObjectStore(storeName, {
-      keyPath: 'id',
-      autoIncrement: true,
-    });
-    store.createIndex('date', 'date');
-    store.createIndex('title', 'title', { unique: true });
+export const db = openDB(dbName, 2, {
+  upgrade(db, oldVersion, newVersion) {
+    // If releases store doesn't exist, create it
+    if (!db.objectStoreNames.contains(storeName)) {
+      const store = db.createObjectStore(storeName, {
+        keyPath: 'id',
+        autoIncrement: true,
+      });
+      store.createIndex('date', 'date');
+      store.createIndex('title', 'title', { unique: true });
+    }
 
-    // Create files store
-    db.createObjectStore(fileStoreName);
+    // If files store doesn't exist, create it
+    if (!db.objectStoreNames.contains(fileStoreName)) {
+      db.createObjectStore(fileStoreName);
+    }
   },
 });
 
 export async function getAllReleases(): Promise<Release[]> {
-  const db = await openDB(dbName, 1);
+  const db = await openDB(dbName, 2);
   const tx = db.transaction([storeName, fileStoreName], 'readonly');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
@@ -66,7 +70,7 @@ export async function getAllReleases(): Promise<Release[]> {
 }
 
 export async function getReleaseById(id: number): Promise<Release | undefined> {
-  const db = await openDB(dbName, 1);
+  const db = await openDB(dbName, 2);
   const tx = db.transaction([storeName, fileStoreName], 'readonly');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
@@ -89,7 +93,7 @@ export async function getReleaseById(id: number): Promise<Release | undefined> {
 }
 
 export async function addRelease(release: Omit<Release, 'id' | 'created_at'>): Promise<number> {
-  const db = await openDB(dbName, 1);
+  const db = await openDB(dbName, 2);
   const tx = db.transaction([storeName, fileStoreName], 'readwrite');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
@@ -125,7 +129,7 @@ export async function addRelease(release: Omit<Release, 'id' | 'created_at'>): P
 }
 
 export async function updateRelease(release: Release): Promise<number> {
-  const db = await openDB(dbName, 1);
+  const db = await openDB(dbName, 2);
   const tx = db.transaction([storeName, fileStoreName], 'readwrite');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
@@ -152,7 +156,7 @@ export async function updateRelease(release: Release): Promise<number> {
 }
 
 export async function deleteRelease(id: number): Promise<void> {
-  const db = await openDB(dbName, 1);
+  const db = await openDB(dbName, 2);
   const tx = db.transaction([storeName, fileStoreName], 'readwrite');
   const store = tx.objectStore(storeName);
   const fileStore = tx.objectStore(fileStoreName);
