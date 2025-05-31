@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, Release } from '../lib/supabase';
-import ReactMarkdown from 'react-markdown';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 const LatestReleases = () => {
   const [releases, setReleases] = useState<Release[]>([]);
-  const [selectedRelease, setSelectedRelease] = useState<Release | null>(null);
+  const basePath = import.meta.env.BASE_URL;
 
   useEffect(() => {
     fetchReleases();
@@ -38,10 +37,10 @@ const LatestReleases = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {releases.map((release) => (
-            <div
+            <a
               key={release.id}
-              className="group bg-gray-800 backdrop-blur-lg bg-opacity-50 rounded-xl p-8 border border-gray-700 hover:border-blue-500 transition-all duration-300 cursor-pointer"
-              onClick={() => setSelectedRelease(release)}
+              href={`${basePath}releases/${release.id}`}
+              className="group bg-gray-800 backdrop-blur-lg bg-opacity-50 rounded-xl p-8 border border-gray-700 hover:border-blue-500 transition-all duration-300"
             >
               <div className="flex justify-between items-start">
                 <h3 className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
@@ -57,33 +56,15 @@ const LatestReleases = () => {
               </div>
               <p className="text-sm text-gray-400 mt-2">{release.date}</p>
               <p className="mt-4 text-gray-300 leading-relaxed">{release.description}</p>
-              <button
+              <span
                 className="mt-6 inline-flex items-center text-blue-400 hover:text-blue-300 font-medium group-hover:translate-x-2 transition-transform"
               >
                 Learn more
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
-            </div>
+              </span>
+            </a>
           ))}
         </div>
-
-        {/* Documentation Modal */}
-        {selectedRelease && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-              <h3 className="text-2xl font-bold text-white mb-4">{selectedRelease.title}</h3>
-              <div className="prose prose-invert">
-                <ReactMarkdown>{selectedRelease.documentation}</ReactMarkdown>
-              </div>
-              <button
-                onClick={() => setSelectedRelease(null)}
-                className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
