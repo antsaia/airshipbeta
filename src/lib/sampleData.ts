@@ -155,7 +155,7 @@ To take advantage of these improvements, no additional configuration is required
       await addRelease(release);
       console.log(`Added release: ${release.title}`);
     } catch (error) {
-      console.error(`Error adding release: ${release.title}`, error);
+      console.error('Error adding release:', error);
     }
   }
 }
