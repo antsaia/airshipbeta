@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getAllReleases, Release } from '../lib/db';
-import { Plus, Edit, Trash, Image } from 'lucide-react';
+import { getAllReleases, deleteRelease, Release } from '../lib/db';
+import { Plus, Edit, Trash, Image, ArrowLeft } from 'lucide-react';
 
 const Admin = () => {
   const [releases, setReleases] = useState<Release[]>([]);
@@ -34,7 +34,15 @@ const Admin = () => {
     <div className="min-h-screen bg-gray-900 py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+          <div className="flex items-center">
+            <a
+              href={basePath}
+              className="text-blue-400 hover:text-blue-300 mr-4"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </a>
+            <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+          </div>
           <a
             href={`${basePath}admin/new`}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors flex items-center"
@@ -68,18 +76,20 @@ const Admin = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <a
-                      href={`${basePath}admin/edit/${release.id}`}
-                      className="text-blue-400 hover:text-blue-300 mr-3"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </a>
-                    <button
-                      onClick={() => release.id && handleDelete(release.id)}
-                      className="text-red-400 hover:text-red-300"
-                    >
-                      <Trash className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center justify-end space-x-2">
+                      <a
+                        href={`${basePath}admin/edit/${release.id}`}
+                        className="text-blue-400 hover:text-blue-300"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </a>
+                      <button
+                        onClick={() => release.id && handleDelete(release.id)}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
