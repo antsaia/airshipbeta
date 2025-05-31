@@ -3,6 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://yourusername.github.io/airshipbeta",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/airshipbeta.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
