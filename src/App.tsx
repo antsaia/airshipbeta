@@ -14,20 +14,20 @@ function App() {
   const basePath = import.meta.env.BASE_URL;
   
   // Remove the base path from the current path for comparison
-  const relativePath = path.replace(basePath, '/');
+  const relativePath = path.replace(basePath, '');
   
   // Extract release ID from path if present
-  const releaseMatch = relativePath.match(/^\/releases\/(\d+)$/);
+  const releaseMatch = relativePath.match(/^releases\/(\d+)$/);
   const releaseId = releaseMatch ? parseInt(releaseMatch[1]) : null;
 
   // Determine which component to render based on the relative path
   const renderContent = () => {
     switch (relativePath) {
-      case '/legal':
+      case 'legal':
         return <Legal />;
-      case '/privacy':
+      case 'privacy':
         return <Privacy />;
-      case '/admin':
+      case 'admin':
         return <Admin />;
       default:
         if (releaseId) {
@@ -44,11 +44,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {relativePath !== '/admin' && <Navbar />}
+      {relativePath !== 'admin' && <Navbar />}
       <main>
         {renderContent()}
       </main>
-      {relativePath !== '/admin' && <Footer />}
+      {relativePath !== 'admin' && <Footer />}
     </div>
   );
 }
