@@ -6,6 +6,7 @@ import LatestReleases from './components/LatestReleases';
 import ReleaseDetails from './components/ReleaseDetails';
 import Legal from './components/Legal';
 import Privacy from './components/Privacy';
+import Admin from './components/Admin';
 import Footer from './components/Footer';
 
 function App() {
@@ -21,12 +22,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
+      {relativePath !== '/admin' && <Navbar />}
       <main>
         {relativePath === '/legal' ? (
           <Legal />
         ) : relativePath === '/privacy' ? (
           <Privacy />
+        ) : relativePath === '/admin' ? (
+          <Admin />
         ) : releaseId ? (
           <ReleaseDetails releaseId={releaseId} />
         ) : (
@@ -36,7 +39,7 @@ function App() {
           </>
         )}
       </main>
-      <Footer />
+      {relativePath !== '/admin' && <Footer />}
     </div>
   );
 }
