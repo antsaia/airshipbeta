@@ -15,11 +15,11 @@ const Navbar = () => {
           >
             <img 
               src={`${basePath}airship-logo-icon.png`}
-              alt="Airship Beta Logo" 
+              alt="Airship Preflight Logo" 
               className="h-8 brightness-0 invert"
             />
             <span className="ml-2 text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
-              Airship Beta
+              Airship Preflight
             </span>
           </a>
 

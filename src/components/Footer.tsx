@@ -11,10 +11,10 @@ const Footer = () => {
             <div className="flex items-center">
               <img 
                 src={`${basePath}airship-logo-icon.png`}
-                alt="Airship Beta Logo" 
+                alt="Airship Preflight Logo" 
                 className="h-8 brightness-0 invert"
               />
-              <span className="ml-2 text-xl font-semibold">Airship Beta</span>
+              <span className="ml-2 text-xl font-semibold">Airship Preflight</span>
             </div>
             <p className="mt-4 text-gray-400">
               Early access to the future of customer engagement
